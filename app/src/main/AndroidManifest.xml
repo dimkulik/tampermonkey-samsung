@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/Theme.TampermonkeySamsung"
+        android:supportsRtl="true">
+
+        <!-- Главная активность — список скриптов -->
+        <activity
+            android:name=".ui.MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <!-- Открытие .user.js файлов -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="application/javascript" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="*" />
+                <data android:pathPattern=".*\\.user\\.js" />
+            </intent-filter>
+        </activity>
+
+        <!-- Активность редактора скрипта -->
+        <activity
+            android:name=".ui.EditorActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+
+        <!-- Активность добавления скрипта по URL -->
+        <activity
+            android:name=".ui.AddScriptActivity"
+            android:exported="false" />
+
+        <!-- Samsung Internet Extension Service -->
+        <service
+            android:name=".service.ScriptInjectionService"
+            android:exported="true"
+            android:permission="com.samsung.android.sbrowser.contentService.BIND">
+            <intent-filter>
+                <action android:name="com.samsung.android.sbrowser.contentService.REQUEST" />
+            </intent-filter>
+            <meta-data
+                android:name="com.samsung.android.sbrowser.contentService.ICON"
+                android:resource="@mipmap/ic_launcher" />
+            <meta-data
+                android:name="com.samsung.android.sbrowser.contentService.VERSION"
+                android:value="1" />
+            <meta-data
+                android:name="com.samsung.android.sbrowser.contentService.SETTINGS_ACTIVITY"
+                android:value="com.dimkulik.tampermonkey.ui.MainActivity" />
+        </service>
+
+    </application>
+
+</manifest>
